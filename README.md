@@ -20,5 +20,5 @@ After installing, run this in R. You'll be prompted for your [AirData username a
     demo("black_carbon", package="airdata")
 
 [R]: http://r-project.org "R"
-[AQDMRS]: https://ofmext.epa.gov/AQDMRS/aqdmrs.html "AQDMRS"
+[AirData]: https://ofmext.epa.gov/AQDMRS/aqdmrs.html "AQDMRS"
 [devtools]: https://github.com/hadley/devtools "devtools"
