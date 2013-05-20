@@ -1,0 +1,12 @@
+Package: airdata
+Maintainer: Who to complain to <david.holstius@berkeley.edu>
+Author: David Holstius
+Version: 0.1
+License: BSD
+Title: AirData
+Description: Tools for querying official U.S. air quality data
+Suggests:
+    testthat,
+    roxygen2
+Collate:
+    'airdata-package.r'
