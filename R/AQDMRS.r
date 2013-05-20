@@ -16,7 +16,7 @@
 #' @references
 #'   \url{http://www.epa.gov/airdata/tas_URL_Query_Construction_Details_list.html}
 #'
-#' @examples \dontrun {
+#' @examples \dontrun{
 #'   AQDMRS.data(
 #'     state = "06",      # California
 #'     county = "001",    # Alameda
@@ -91,7 +91,7 @@ AQDMRS.data <- function(
 #'
 #' @family AQDMRS
 #' 
-#' @examples \dontrun {
+#' @examples \dontrun{
 #'   query <- AQDMRS.query(
 #'     state = "06",      # California
 #'     county = "001",    # Alameda

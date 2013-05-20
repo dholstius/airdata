@@ -10,3 +10,4 @@ Suggests:
     roxygen2
 Collate:
     'airdata-package.r'
+    'AQDMRS.r'

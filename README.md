@@ -20,24 +20,16 @@ Example usage
     library(airdata)
     
     # 1. Find parameter codes corresponding to "black carbon"
-    library(httr)
+    data(AQDMRS)
     library(stringr)
-    response <- GET(
-        'https://ofmext.epa.gov/AQDMRS/ws/list', 
-        query = list(name="param", resource="rawData")
-    )
-    params <- read.csv(
-        textConnection(content(response, as="text")),
-        sep="\t", header=FALSE, col.names=c("code", "name")
-    )
-    subset(params, str_detect(tolower(name), "black carbon"))
+    subset(AQDMRS.params, str_detect(tolower(name), "black carbon"))
 
     # 2. Construct a query for a week's worth of hourly data from one site
     query <- AQDMRS.query(
-        state = "06",    # California
-        county = "001",  # Alameda
-        site = "0011",   # West Oakland
-        bdate = "2012-04-15",
+        state = "06",           # California
+        county = "001",         # Alameda County
+        site = "0011",          # West Oakland site
+        bdate = "2012-04-15",   
         edate = "2012-04-23"
     )
 
