@@ -104,7 +104,7 @@ AQDMRS.data <- function(
         Date.GMT <- X24.Hour.GMT <- Day.In.Year.GMT <- NULL
     })
     class(dat) <- c(class(dat), "AQDMRS")
-    setattr(dat, "url", response$url)
+    attr(dat, "url") <- response$url
     return(dat)
 }
 
