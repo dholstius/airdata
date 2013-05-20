@@ -1,8 +1,7 @@
 library(airdata)
+library(stringr)
 
 # 1. Find parameter codes corresponding to "black carbon"
-data(AQDMRS)
-library(stringr)
 AQDMRS.params <- AQDMRS.list(name="param")
 subset(AQDMRS.list(name="param"), str_detect(tolower(name), "black carbon"))
 
