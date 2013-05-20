@@ -104,7 +104,7 @@ AQDMRS.data <- function(
 #' @export
 AQDMRS.query <- function (...) {
     args <- as.list(substitute(list(...)))[-1L]
-    promise <- as.call(c(quote(AQDMRS.call), args))
+    promise <- as.call(c(quote(AQDMRS.data), args))
     class(promise) <- c(class(promise), "AQDMRS.query")
     return(promise)
 }
