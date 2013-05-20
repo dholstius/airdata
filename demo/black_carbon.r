@@ -3,7 +3,8 @@ library(airdata)
 # 1. Find parameter codes corresponding to "black carbon"
 data(AQDMRS)
 library(stringr)
-subset(AQDMRS.params, str_detect(tolower(name), "black carbon"))
+AQDMRS.params <- AQDMRS.list(name="param")
+subset(AQDMRS.list(name="param"), str_detect(tolower(name), "black carbon"))
 
 # 2. Construct a query for a week's worth of hourly data from one site
 BC_data <- AQDMRS.data(

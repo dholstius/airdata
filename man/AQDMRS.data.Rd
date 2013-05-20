@@ -44,6 +44,7 @@
   \url{http://www.epa.gov/airdata/tas_URL_Query_Construction_Details_list.html}
 }
 \seealso{
-  Other AQDMRS: \code{\link{AQDMRS.query}}
+  Other AQDMRS: \code{\link{AQDMRS.list}},
+  \code{\link{AQDMRS.query}}
 }
 

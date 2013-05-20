@@ -1,3 +1,28 @@
+#' AQDMRS.list
+#'
+#' Metadata interface to the AQDMRS gateway.
+#'
+#' @param \dots       query arguments
+#'
+#' @family  AQDMRS
+#' @references
+#'   \url{http://www.epa.gov/airdata/tas_URL_Query_Construction_Details_list.html}
+#'
+#' @export
+AQDMRS.list <- function (...) {
+    require(httr)
+    response <- GET(
+        'https://ofmext.epa.gov/AQDMRS/ws/list', 
+        query = list(resource="rawData", ...)
+    )   
+    read.csv(
+        textConnection(content(response, as="text")),
+        sep = "\t", 
+        header = FALSE,
+        col.names = c("code", "name")
+    )
+}
+
 #' AQDMRS.data
 #'
 #' Fetch data from the AQDMRS gateway.

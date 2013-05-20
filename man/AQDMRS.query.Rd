@@ -22,6 +22,7 @@
 }
 }
 \seealso{
-  Other AQDMRS: \code{\link{AQDMRS.data}}
+  Other AQDMRS: \code{\link{AQDMRS.data}},
+  \code{\link{AQDMRS.list}}
 }
 
