@@ -1,9 +1,7 @@
 README
 ======
 
-Use this package to import official U.S. air quality data from [AirData] into R. You'll need [an AirData username and password](http://www.epa.gov/airdata/tas_Data_Mart_Registration.html).
-
-Seeking comment!
+Use this package to import official U.S. air quality data from [AirData] into R. Seeking comment!
 
 Installation
 ------------
@@ -17,7 +15,7 @@ Install directly from GitHub using [devtools]:
 Example usage
 -------------
 
-After installing, run this in R:
+After installing, run this in R. You'll be prompted for your [AirData username and password](http://www.epa.gov/airdata/tas_Data_Mart_Registration.html).
 
     demo("black_carbon", package="airdata")
 
