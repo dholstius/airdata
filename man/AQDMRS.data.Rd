@@ -2,22 +2,24 @@
 \alias{AQDMRS.data}
 \title{AQDMRS.data}
 \usage{
-  AQDMRS.data(state, county, site, param, bdate, edate,
-    dur = 1, user = readline("AQDMRS username: "),
-    pw = readline("AQDMRS password: "))
+  AQDMRS.data(state, county, bdate,
+    edate = as.Date(bdate) + 1, dur = 1,
+    user = readline("AQDMRS username: "),
+    pw = readline("AQDMRS password: "), ...,
+    verbose = TRUE)
 }
 \arguments{
   \item{state}{Two-digit FIPS state code}
 
   \item{county}{Three-digit FIPS county code}
 
-  \item{site}{Four-digit AQS site code}
-
   \item{bdate}{beginning date (see \link{as.Date})}
 
   \item{edate}{ending date}
 
   \item{dur}{temporal resolution (1=hourly)}
+
+  \item{\dots}{(optional) additional query parameters}
 
   \item{user}{AQRDMS username}
 

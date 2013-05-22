@@ -29,10 +29,10 @@ AQDMRS.list <- function (...) {
 #'
 #' @param state     Two-digit FIPS state code
 #' @param county    Three-digit FIPS county code
-#' @param site      Four-digit AQS site code
 #' @param bdate     beginning date (see \link{as.Date})
 #' @param edate     ending date
 #' @param dur       temporal resolution (1=hourly)
+#' @param \dots     (optional) additional query parameters
 #' @param user      AQRDMS username
 #' @param password  AQRDMS password
 #'
@@ -52,37 +52,32 @@ AQDMRS.list <- function (...) {
 #'
 #' @export
 AQDMRS.data <- function(
-    state,
-    county, 
-    site, 
-    param,
-    bdate,
-    edate,
-    dur = 1,
-    user = readline("AQDMRS username: "), 
-    pw = readline("AQDMRS password: ")
+    ...,
+    verbose = TRUE
 ) {
+
+    # Build query from arguments
+    query <- as.list(substitute(list(...)))[-1L]
+    query$bdate <- format(as.Date(query$bdate), "%Y%m%d")
+    query$edate <- format(as.Date(query$edate), "%Y%m%d")
+    query$format <- "DMCSV"
+    
+    if (verbose) {
+        message("Downloading data from ", query$bdate, " to ", query$edate)
+    }
+    
+    # Hit the website, and make sure the response was OK
     require(httr)
-    message("Downloading data from ", bdate, " to ", edate)
-    response <- GET(
-        'https://ofmext.epa.gov/AQDMRS/ws/rawData',
-        query = list(
-            bdate = format(as.Date(bdate), "%Y%m%d"),
-            edate = format(as.Date(edate), "%Y%m%d"),
-            state = state,
-            county = county,
-            site = site,
-            param = param,
-            dur = dur,
-            user = user,
-            pw = pw,
-            format = 'DMCSV'
-        )
-    )
+    response <- GET('https://ofmext.epa.gov/AQDMRS/ws/rawData', query=query)
+    if (verbose) {
+        message("URL: ", response$url)
+    }
     if (response$status_code != 200) {
         warning("response not OK")
         return(response)
     }
+
+    # Parse returned text, being careful to treat "numeric" codes as factors
     txt <- sub("END OF FILE", "", content(response, as="text"))
     dat <- read.csv(
         textConnection(txt), 
@@ -94,6 +89,8 @@ AQDMRS.data <- function(
             POC = "factor"
         )
     )
+
+    # Parse timestamps, then erase redundant fields
     dat <- within(dat, {
         GMT <- as.POSIXct(
             paste(Date.GMT, X24.Hour.GMT, sep=" "), 
@@ -103,6 +100,8 @@ AQDMRS.data <- function(
         Date.Local <- X24.Hour.Local <- NULL
         Date.GMT <- X24.Hour.GMT <- Day.In.Year.GMT <- NULL
     })
+
+    # Reclass object, tag with URL, and return
     class(dat) <- c(class(dat), "AQDMRS")
     attr(dat, "url") <- response$url
     return(dat)
@@ -127,9 +126,21 @@ AQDMRS.data <- function(
 #' }
 #'
 #' @export
-AQDMRS.query <- function (...) {
-    args <- as.list(substitute(list(...)))[-1L]
-    promise <- as.call(c(quote(AQDMRS.data), args))
+AQDMRS.query <- function (
+    state,
+    county,
+    bdate,
+    edate = as.Date(bdate) + 1,
+    dur = 1,
+    ...,
+    user = readline("AQDMRS username: "),
+    pw = readline("AQDMRS password: "),
+    verbose = TRUE
+) {
+    argnames <- setdiff(names(formals()), list("..."))
+    args <- mget(argnames, sys.frame(sys.nframe()))
+    dotargs <- as.list(substitute(list(...)))[-1L]
+    promise <- as.call(c(quote(AQDMRS.data), c(args, dotargs)))
     class(promise) <- c(class(promise), "AQDMRS.query")
     return(promise)
 }
