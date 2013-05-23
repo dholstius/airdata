@@ -5,6 +5,10 @@ Version: 0.1
 License: BSD
 Title: AirData
 Description: Tools for querying official U.S. air quality data
+Depends:
+	data.table,
+	fasttime,
+	stringr
 Suggests:
     testthat,
     roxygen2
