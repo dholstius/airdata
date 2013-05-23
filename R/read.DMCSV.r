@@ -66,8 +66,13 @@ read.DMCSV <- function(file, timestamp=TRUE, rename=TRUE, simplify=TRUE) {
 			old = c("Method.Description"),
 			new = c("Method")
 		)
+		
 		dat$Method.Type <- NULL
+
 		dat$Units <- str_replace(dat$Units, "Parts per billion", "ppb")
+		dat$Units <- str_replace(dat$Units, "Parts per million", "ppm")
+		dat$Units <- str_replace(dat$Units, "Micrograms/cubic meter", "ug/m3")
+		dat$Units <- factor(dat$Units)
 	}
 	
 	if (simplify) {
