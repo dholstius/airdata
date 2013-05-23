@@ -12,3 +12,4 @@ Collate:
     'airdata-package.r'
     'AQDMRS.r'
     'update.list.r'
+    'read.DMCSV.r'

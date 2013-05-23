@@ -2,11 +2,7 @@
 \alias{AQDMRS.data}
 \title{AQDMRS.data}
 \usage{
-  AQDMRS.data(state, county, bdate,
-    edate = as.Date(bdate) + 1, dur = 1,
-    user = readline("AQDMRS username: "),
-    pw = readline("AQDMRS password: "), ...,
-    verbose = TRUE)
+  AQDMRS.data(..., verbose = TRUE)
 }
 \arguments{
   \item{state}{Two-digit FIPS state code}

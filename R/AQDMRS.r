@@ -78,31 +78,12 @@ AQDMRS.data <- function(
     }
 
     # Parse returned text, being careful to treat "numeric" codes as factors
-    txt <- sub("END OF FILE", "", content(response, as="text"))
-    dat <- read.csv(
-        textConnection(txt), 
-        colClasses = list(
-            State.Code = "factor",
-            County.Code = "factor",
-            Site.Num = "factor",
-            Parameter.Code = "factor",
-            POC = "factor"
-        )
+    dat <- read.DMCSV(
+        textConnection(content(response, as="text")),
+        simplify = FALSE
     )
 
-    # Parse timestamps, then erase redundant fields
-    dat <- within(dat, {
-        GMT <- as.POSIXct(
-            paste(Date.GMT, X24.Hour.GMT, sep=" "), 
-            tz = "GMT",
-            format = '%Y-%m-%d %H:%M'
-        )
-        Date.Local <- X24.Hour.Local <- NULL
-        Date.GMT <- X24.Hour.GMT <- Day.In.Year.GMT <- NULL
-    })
-
-    # Reclass object, tag with URL, and return
-    class(dat) <- c(class(dat), "AQDMRS")
+    # Tag with URL, and return
     attr(dat, "url") <- response$url
     return(dat)
 }
