@@ -40,11 +40,13 @@ Before executing a query, you'll need an [AirData username and password](http://
     )
     BC_STP <- eval(q)
 
-Queries are *lazy* and can me modified before being evaluated, or recycled after evaluation. This is handy, because you don't have to type common parameters more than once. And if you like, you can specify `user=...` and `pw=...` in the query, rather than entering them interactively.
+Queries are *lazy* and can me modified before being evaluated, or recycled after evaluation. This is handy, because you don't have to type common parameters more than once:
 
     q$param <- "88313"
     BC_LC <- eval(q)
 
+And, if you like, you can specify `user=...` and `pw=...` in the query, rather than entering them interactively.
+ 
 A quick time-series plot:
 
     with(BC_STP, plot(GMT, value, main="West Oakland BC", ylab="ug/m3 (STP)"))
