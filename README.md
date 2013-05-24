@@ -25,7 +25,7 @@ A typical query might start with a pollutant of interest. Here's how to identify
     phrase <- "black carbon"
     show(subset(params, str_detect(tolower(name), phrase)))
 
-There are two such codes. `LC` means "local conditions" and `STP` means "standard temperature and pressure". You can use either, although a particular site might record data for only one of the two. In this case, `STP`` is what we want.
+There are two such codes. `LC (88313)` means "local conditions" and `STP (84313)` means "standard temperature and pressure". You can use either, although a particular site might record data for only one of the two. In this case, `STP` is what we want.
 
 Before executing a query, you'll need an [AirData username and password](http://www.epa.gov/airdata/tas_Data_Mart_Registration.html). Then you can do the following:
 
