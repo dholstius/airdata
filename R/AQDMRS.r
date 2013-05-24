@@ -23,9 +23,11 @@ AQDMRS.list <- function (...) {
     )
 }
 
-#' AQDMRS.data
+#' AQDMRS.query
 #'
-#' Fetch data from the AQDMRS gateway.
+#' Lazy query-building constructor.
+#'
+#' @family AQDMRS
 #'
 #' @param state     Two-digit FIPS state code
 #' @param county    Three-digit FIPS county code
@@ -34,67 +36,8 @@ AQDMRS.list <- function (...) {
 #' @param dur       temporal resolution (1=hourly)
 #' @param \dots     (optional) additional query parameters
 #' @param user      AQRDMS username
-#' @param password  AQRDMS password
-#'
-#' @family  AQDMRS
-#' @note    Use \link{AQDMRS.query} to construct a lazy query (which you can then modify as needed).
-#' @references
-#'   \url{http://www.epa.gov/airdata/tas_URL_Query_Construction_Details_list.html}
-#'
-#' @examples \dontrun{
-#'   AQDMRS.data(
-#'     state = "06",      # California
-#'     county = "001",    # Alameda
-#'     site = "0011",     # West Oakland
-#'     param = "42601"    # NO2
-#'   )
-#' }
-#'
-#' @export
-AQDMRS.data <- function(
-    ...,
-    verbose = TRUE
-) {
-
-    # Build query from arguments
-    query <- as.list(substitute(list(...)))[-1L]
-    query$bdate <- format(as.Date(query$bdate), "%Y%m%d")
-    query$edate <- format(as.Date(query$edate), "%Y%m%d")
-    query$format <- "DMCSV"
-    
-    if (verbose) {
-        message("Downloading data from ", query$bdate, " to ", query$edate)
-    }
-    
-    # Hit the website, and make sure the response was OK
-    require(httr)
-    response <- GET('https://ofmext.epa.gov/AQDMRS/ws/rawData', query=query)
-    if (verbose) {
-        message("URL: ", response$url)
-    }
-    if (response$status_code != 200) {
-        warning("response not OK")
-        return(response)
-    }
-
-    # Parse returned text, being careful to treat "numeric" codes as factors
-    dat <- read.DMCSV(
-        textConnection(content(response, as="text")),
-        simplify = FALSE
-    )
-
-    # Tag with URL, and return
-    attr(dat, "url") <- response$url
-    return(dat)
-}
-
-#' AQDMRS.query
-#'
-#' Lazy query-building constructor.
-#'
-#' @inheritParams AQDMRS.data
-#'
-#' @family AQDMRS
+#' @param pw        AQRDMS password
+#' @param verbose   logical
 #' 
 #' @examples \dontrun{
 #'   query <- AQDMRS.query(
@@ -126,13 +69,59 @@ AQDMRS.query <- function (
     return(promise)
 }
 
-#' @family AQDMRS
-#' 
+#' AQDMRS.data
+#'
+#' Fetch data from the AQDMRS gateway.
+#'
+#' @inheritParams AQDMRS.data
+#'
+#' @family  AQDMRS
+#' @note    Use \link{AQDMRS.query} to construct a lazy query (which you can then modify as needed).
+#' @references
+#'   \url{http://www.epa.gov/airdata/tas_URL_Query_Construction_Details_list.html}
+#'
+#' @examples \dontrun{
+#'   AQDMRS.data(
+#'     state = "06",      # California
+#'     county = "001",    # Alameda
+#'     site = "0011",     # West Oakland
+#'     param = "42601"    # NO2
+#'   )
+#' }
+#'
 #' @export
-as.data.frame.AQDMRS.query <- function(x, ...) {
+AQDMRS.data <- function(
+    ...,
+    verbose = TRUE
+) {
+
+    # Build query from arguments
     args <- as.list(substitute(list(...)))[-1L]
-    for (key in names(args)) {
-        x[[key]] <- args[[key]]
-    } 
-    return(eval(x))
+    args$bdate <- format(as.Date(args$bdate), "%Y%m%d")
+    args$edate <- format(as.Date(args$edate), "%Y%m%d")
+    args$format <- "DMCSV"
+    
+    if (verbose) {
+        message("Downloading data from ", args$bdate, " to ", args$edate)
+    }
+    
+    # Hit the website, and make sure the response was OK
+    require(httr)
+    response <- GET('https://ofmext.epa.gov/AQDMRS/ws/rawData', query=args)
+    if (verbose) {
+        message("URL: ", response$url)
+    }
+    if (response$status_code != 200) {
+        warning("response not OK")
+        return(response)
+    }
+
+    # Write to a temporary file, then parse
+    tmp <- tempfile()
+    cat(content(response, as="text"), file=tmp)
+    dat <- read.DMCSV(tmp)
+
+    # Tag with URL, and return
+    attr(dat, "url") <- response$url
+    return(dat)
 }

@@ -2,18 +2,20 @@
 \alias{read.DMCSV}
 \title{read.DMCSV}
 \usage{
-  read.DMCSV(file, timestamp = TRUE, rename = TRUE,
-    simplify = TRUE)
+  read.DMCSV(file,
+    columns = list(state = "State Code", county = "County Code", site = "Site Num", longitude = "Longitude", latitude = "Latitude", datum = "Datum", parameter = "Parameter Code", description = "AQS Parameter Desc", units = "Units of Measure", value = "Sample Measurement"),
+    omit.EOF = TRUE, verbose = FALSE)
 }
 \arguments{
   \item{file}{filename}
 
-  \item{timestamp}{logical: parse timestamps?}
+  \item{columns}{list: old fieldnames are values; new
+  fieldnames are keys}
 
-  \item{rename}{logical: rename columns?}
+  \item{omit.EOF}{logical: exclude "END OF FILE" line
+  (requires grep)?}
 
-  \item{simplify}{logical: drop uninformative columns (all
-  NA, for example)}
+  \item{verbose}{logical: narrate progress?}
 }
 \description{
   Parse a DMCSV-formatted file

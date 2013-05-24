@@ -18,7 +18,13 @@
 
   \item{dur}{temporal resolution (1=hourly)}
 
+  \item{\dots}{(optional) additional query parameters}
+
   \item{user}{AQRDMS username}
+
+  \item{pw}{AQRDMS password}
+
+  \item{verbose}{logical}
 }
 \description{
   Lazy query-building constructor.

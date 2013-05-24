@@ -1,14 +1,17 @@
 Package: airdata
 Maintainer: Who to complain to <david.holstius@berkeley.edu>
 Author: David Holstius
-Version: 0.1
+Version: 0.2
 License: BSD
 Title: AirData
 Description: Tools for querying official U.S. air quality data
+OS_type: unix
 Depends:
-	data.table,
-	fasttime,
-	stringr
+    data.table,
+    fasttime,
+    stringr,
+    httr,
+    plyr
 Suggests:
     testthat,
     roxygen2

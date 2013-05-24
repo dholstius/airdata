@@ -4,23 +4,6 @@
 \usage{
   AQDMRS.data(..., verbose = TRUE)
 }
-\arguments{
-  \item{state}{Two-digit FIPS state code}
-
-  \item{county}{Three-digit FIPS county code}
-
-  \item{bdate}{beginning date (see \link{as.Date})}
-
-  \item{edate}{ending date}
-
-  \item{dur}{temporal resolution (1=hourly)}
-
-  \item{\dots}{(optional) additional query parameters}
-
-  \item{user}{AQRDMS username}
-
-  \item{password}{AQRDMS password}
-}
 \description{
   Fetch data from the AQDMRS gateway.
 }

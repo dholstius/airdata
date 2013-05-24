@@ -1,5 +1,4 @@
 export(AQDMRS.data)
 export(AQDMRS.list)
 export(AQDMRS.query)
-export(as.data.frame.AQDMRS.query)
 export(read.DMCSV)
