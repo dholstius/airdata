@@ -51,7 +51,21 @@ A quick time-series plot:
 
     with(BC_STP, plot(GMT, value, main="West Oakland BC", ylab="ug/m3 (STP)"))
 
-More demos:
+Windows support
+---------------
+
+AirData has an annoying habit of appending `END OF FILE` to every dataset. On unix-compatible platforms, including OS X, it's fast and easy to eliminate this with a quick call to `grep.` On Windows, there's no builtin `grep`, and there's no fast workaround in R (AFAIK, but please comment if you know of one). A workaround (and you can do this on other platforms, too) is:
+
+1. download a `.txt` file from the [AirData] website
+2. open it up in a text editor, delete the "END OF FILE" line, and re-save
+3. run the following in R:
+
+    library(airdata)
+    downloaded_file <- file.choose() 
+    BC_STP <- read.DMCSV(downloaded_file, omit.EOF=FALSE)
+
+More demos
+----------
 
     demo("criteria", package="airdata")
     demo("black_carbon", package="airdata")
