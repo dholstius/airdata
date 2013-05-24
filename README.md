@@ -56,9 +56,10 @@ Windows support
 
 AirData has an annoying habit of appending `END OF FILE` to every dataset. On unix-compatible platforms, including OS X, it's fast and easy to eliminate this with a quick call to `grep.` On Windows, there's no builtin `grep`, and there's no fast workaround in R (AFAIK, but please comment if you know of one). A workaround (and you can do this on other platforms, too) is:
 
-1. download a `.txt` file from the [AirData] website
+1. download a `.txt` file from the [AirData] website (choose "DMCSV" for the format)
 2. open it up in a text editor, delete the "END OF FILE" line, and re-save
-3. run the following in R:
+
+Then you can import the file into R with `read.DMCSV()`:
 
     library(airdata)
     downloaded_file <- file.choose() 
