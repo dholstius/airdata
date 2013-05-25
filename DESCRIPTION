@@ -17,6 +17,7 @@ Suggests:
     roxygen2
 Collate:
     'airdata-package.r'
-    'AQDMRS.r'
     'update.list.r'
+    'expand.args.r'
     'read.DMCSV.r'
+    'AQDMRS.r'
