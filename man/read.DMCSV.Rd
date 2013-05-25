@@ -3,7 +3,7 @@
 \title{read.DMCSV}
 \usage{
   read.DMCSV(file,
-    columns = list(state = "State Code", county = "County Code", site = "Site Num", longitude = "Longitude", latitude = "Latitude", datum = "Datum", parameter = "Parameter Code", description = "AQS Parameter Desc", units = "Units of Measure", value = "Sample Measurement"),
+    columns = list(latitude = "Latitude", longitude = "Longitude", datum = "Datum", geo_accuracy = "Horizontal Accuracy", state = "State Code", county = "County Code", site = "Site Num", parameter = "Parameter Code", POC = "POC", description = "AQS Parameter Desc", units = "Units of Measure", duration = "Sample Duration", frequency = "Sample Frequency", LOD = "Detection Limit", uncertainty = "Measurement Uncertainty", qualifier = "Qualifier Description", type = "Method Type", method = "Method Description", value = "Sample Measurement"),
     omit.EOF = TRUE, verbose = FALSE)
 }
 \arguments{

@@ -8,13 +8,12 @@
   \item{\dots}{query arguments}
 }
 \description{
-  Metadata interface to the AQDMRS gateway.
+  Request metadata
 }
 \references{
   \url{http://www.epa.gov/airdata/tas_URL_Query_Construction_Details_list.html}
 }
 \seealso{
-  Other AQDMRS: \code{\link{AQDMRS.data}},
-  \code{\link{AQDMRS.query}}
+  Other AQDMRS: \code{\link{AQDMRS.query}}
 }
 

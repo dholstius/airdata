@@ -1,6 +1,6 @@
 #' AQDMRS.list
 #'
-#' Metadata interface to the AQDMRS gateway.
+#' Request metadata
 #'
 #' @param \dots       query arguments
 #'
@@ -25,7 +25,7 @@ AQDMRS.list <- function (...) {
 
 #' AQDMRS.query
 #'
-#' Lazy query-building constructor.
+#' Build a query (and, optionally, evaluate it)
 #'
 #' @family AQDMRS
 #'
@@ -37,16 +37,20 @@ AQDMRS.list <- function (...) {
 #' @param \dots     (optional) additional query parameters
 #' @param user      AQRDMS username
 #' @param pw        AQRDMS password
-#' @param verbose   logical
+#' @param verbose   logical: be chatty?
+#' @param eval      logical: be lazy (default) or force immediate evaluation?
 #' 
 #' @examples \dontrun{
-#'   query <- AQDMRS.query(
-#'     state = "06",      # California
-#'     county = "001",    # Alameda
-#'     site = "0011",     # West Oakland
+#'   q <- AQDMRS.query(
+#'     state = "06",          # California
+#'     county = "001",        # Alameda
+#'     site = "0011",         # West Oakland
+#'     param = "42601",       # Nitric oxide (NO)
+#'     bdate = "2012-01-01"
 #'   )
-#'   WestOakland_NO <- as.data.frame(query, param = "42601")
-#'   WestOakland_NO2 <- as.data.frame(query, param = "42602")
+#'   NO_data <- eval(q)
+#'   q$param <- "42602"
+#'   NO2_data <- eval(q)
 #' }
 #'
 #' @export
@@ -59,60 +63,34 @@ AQDMRS.query <- function (
     ...,
     user = readline("AQDMRS username: "),
     pw = readline("AQDMRS password: "),
-    verbose = TRUE
+    verbose = TRUE,
+    eval = FALSE
 ) {
-    argnames <- setdiff(names(formals()), list("..."))
-    args <- mget(argnames, sys.frame(sys.nframe()))
-    dotargs <- as.list(substitute(list(...)))[-1L]
-    promise <- as.call(c(quote(AQDMRS.data), c(args, dotargs)))
-    class(promise) <- c(class(promise), "AQDMRS.query")
-    return(promise)
-}
-
-#' AQDMRS.data
-#'
-#' Fetch data from the AQDMRS gateway.
-#'
-#' @inheritParams AQDMRS.data
-#'
-#' @family  AQDMRS
-#' @note    Use \link{AQDMRS.query} to construct a lazy query (which you can then modify as needed).
-#' @references
-#'   \url{http://www.epa.gov/airdata/tas_URL_Query_Construction_Details_list.html}
-#'
-#' @examples \dontrun{
-#'   AQDMRS.data(
-#'     state = "06",      # California
-#'     county = "001",    # Alameda
-#'     site = "0011",     # West Oakland
-#'     param = "42601"    # NO2
-#'   )
-#' }
-#'
-#' @export
-AQDMRS.data <- function(
-    ...,
-    verbose = TRUE
-) {
-
-    # Build query from arguments
-    args <- as.list(substitute(list(...)))[-1L]
-    args$bdate <- format(as.Date(args$bdate), "%Y%m%d")
-    args$edate <- format(as.Date(args$edate), "%Y%m%d")
-    args$format <- "DMCSV"
     
-    if (verbose) {
-        message("Downloading data from ", args$bdate, " to ", args$edate)
+    # Be lazy, unless eval=TRUE
+    args <- expand.args()
+    if (!eval) {
+        args$eval <- TRUE
+        return(as.call(c(AQDMRS.query, args)))
     }
+    
+    # Convert date arguments to Date objects
+    args <- update.list(
+        args,
+        bdate = format(as.Date(args$bdate), "%Y%m%d"),
+        edate = format(as.Date(args$edate), "%Y%m%d")
+    )
     
     # Hit the website, and make sure the response was OK
     require(httr)
+    args$format <- "DMCSV"
     response <- GET('https://ofmext.epa.gov/AQDMRS/ws/rawData', query=args)
     if (verbose) {
+        message("Date range: ", args$bdate, " to ", args$edate)
         message("URL: ", response$url)
     }
     if (response$status_code != 200) {
-        warning("response not OK")
+        warning("Response not OK")
         return(response)
     }
 
