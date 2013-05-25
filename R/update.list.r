@@ -6,9 +6,9 @@
 #' @param	...		arguments of the form key=value
 #' @return	a copy of the list with updated items
 update.list <- function(object, ...) {
-	args <- list(...)
-	for (key in names(args)) {	
-		object[[key]] <- args[[key]]
-	}
-	return(object)
+    args <- list(...)
+    for (key in names(args)) {	
+        object[[key]] <- args[[key]]
+    
+    return(object)
 }
